@@ -20,3 +20,14 @@ def analyze_notes(notes: str):
 
     {notes}
     """
+
+    current_model = "gpt-5.5"
+    response = client.chat.completions.create(
+        model=current_model,
+        messages=[
+            {"role": "system", "content": "You are a helpful assistant"},
+            {"role": "user", "content": prompt}
+        ]
+    )
+
+    return response.choices[0].message.content
