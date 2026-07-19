@@ -7,14 +7,29 @@ client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 def analyze_notes(notes: str):
     prompt = f"""
-    You are an assistant that analyzes meeting notes
+    Analyze the meeting notes and return ONLY valid JSON.
 
-    Return:
+    The JSON must have exactly this structure:
 
-    - Summary
-    - Action Items
-    - Decisions
-    - Risks
+    {{
+        "summary": "...",
+        "action_items": [
+            "...",
+            "..."
+        ],
+        "decisions": [
+            "...",
+            "..."
+        ],
+        "risks": [
+            "...",
+            "..."
+        ]
+    }}
+
+    Do not include markdown.
+    Do not include explanations.
+    Return JSON only.    
 
     Meeting Notes:
 
@@ -22,12 +37,12 @@ def analyze_notes(notes: str):
     """
 
     current_model = "gpt-5.5"
-    response = client.chat.completions.create(
+    response = client.responses.create(
         model=current_model,
-        messages=[
-            {"role": "system", "content": "You are a helpful assistant"},
+        input=[
+            {"role": "system", "content": "You are an assistant that analyzes meeting notes"},
             {"role": "user", "content": prompt}
         ]
     )
 
-    return response.choices[0].message.content
+    return response.output_text
