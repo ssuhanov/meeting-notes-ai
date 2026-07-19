@@ -1,2 +1,2 @@
 source .venv/bin/activate
-python3 main.py
+uvicorn main:app --env-file .env --reload
